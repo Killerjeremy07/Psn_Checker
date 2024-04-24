@@ -1,7 +1,7 @@
 import discord
 
 # IN ORDER: BRONZE, SILVER, GOLD, PLATINIUM
-TROPHY_TEXTS = ["🥉 Bronze", "🥈 Silver", "🥇 Gold", "💎 Platinium"]
+TROPHY_TEXTS = ["🥉 Bronze", "🥈 Silver", "🥇 Gold", "💎 Platinum"]
 
 EMBED_COLOR = discord.Color.from_rgb(0, 0, 255)
 
