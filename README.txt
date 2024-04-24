@@ -2,6 +2,9 @@ here is some important info
 
 to install all needed pips:
 py -m pip install -r requirements.txt
+i recently saw that for some this does not work if it does not work here are the pips:
+pip install PSNAWP
+pip install discord.py==2.3.2
 
 fill in the config:
 npsso
