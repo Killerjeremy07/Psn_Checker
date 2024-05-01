@@ -14,5 +14,8 @@ if you get this error ModelNotFoundError:just uninstall and reinstall discord
 pip uninstall discord.py
 pip install discord.py
 
+if everything is done you can run the bot by typing:
+main.py
+
 you dont have to give me credit idc about it but if you do would be nice just dont claim its yours
 thats all enjoy
