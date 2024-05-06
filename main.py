@@ -10,9 +10,9 @@ activity = discord.Activity(type=discord.ActivityType.watching, name="Your Ps Ac
 bot = Bot(psn_api_token=config.Secrets.PSN_API, intents=intents, command_prefix="/", activity=activity)
 
 # You can add a custom command here (see also inside the psn_cog file)
-@bot.tree.command(name='ping', description='test if bot is responding!')
+@bot.slash_command(name='ping', description='Checks if bot is responding')
 async def ping(interaction):
-    await interaction.response.send_message(f'Pong! ||{round(bot.latency * 1000)}ms||') 
+    await interaction.response.send_message(f'Pong! ||{round(bot.latency * 1000)}ms||')
 
 @bot.event
 async def on_ready():
