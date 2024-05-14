@@ -1,30 +1,21 @@
-import asyncio
-
+import os
 import discord
-from custom_bot import Bot
 
 import config
+from modules.custom_bot import Bot
+
 
 intents = discord.Intents.all()
-activity = discord.Activity(type=discord.ActivityType.watching, name="Your Ps Account")
-bot = Bot(psn_api_token=config.Secrets.PSN_API, intents=intents, command_prefix="/", activity=activity)
-
-# You can add a custom command here (see also inside the psn_cog file)
-@bot.slash_command(name='ping', description='Checks if bot is responding')
-async def ping(interaction):
-    await interaction.response.send_message(f'Pong! ||{round(bot.latency * 1000)}ms||')
+bot = Bot(psn_api_token=config.Secrets.PSN_API, intents=intents, command_prefix="/")
 
 @bot.event
 async def on_ready():
-    # Set the activity once the bot is ready
-    await bot.change_presence(activity=activity)
-    await bot.tree.sync()
     print("Ready!")
+    bot.presence_updater.start()
 
-async def main():
-    # Load the psn_cog extension
-    await bot.load_extension("psn_cog")
+for file in os.listdir("cogs"):
+    if not file.endswith(".py"): continue
+    complete_file_module = f"cogs.{file.removesuffix('.py')}"
+    bot.load_extension(complete_file_module)
 
-
-asyncio.run(main())
 bot.run(config.Secrets.BOT_TOKEN)
