@@ -17,5 +17,7 @@ pip install discord.py
 if everything is done you can run the bot by typing:
 main.py
 
+if the newer version is not working: if the newer version is not working just download a older version of the code
+
 you dont have to give me credit idc about it but if you do would be nice just dont claim its yours
 thats all enjoy
