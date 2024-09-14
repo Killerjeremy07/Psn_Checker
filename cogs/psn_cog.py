@@ -9,7 +9,7 @@ import discord
 import pycountry
 from colorthief import ColorThief
 from discord.ext import commands
-from psnawp_api.core.psnawp_exceptions import PSNAWPForbidden
+from psnawp_api.core.psnawp_exceptions import PSNAWPForbidden, PSNAWPNotFound
 from psnawp_api.models.trophies.trophy_summary import TrophySummary
 from modules.custom_psnawp import Search
 
@@ -98,8 +98,32 @@ class PSNCog(commands.Cog):
             user = self.bot.psnawp.user(online_id=online_id)
             account_id = user.account_id
         elif account_id is not None:
-            user = self.bot.psnawp.user(account_id=account_id)
-
+            new_account_id: str | int = account_id
+            try:
+                base_64_account_id = base64.b64decode(new_account_id)
+            except Exception:
+                pass
+            else:
+                if len(base_64_account_id) == 8:
+                    new_account_id = int.from_bytes(base_64_account_id,'little')
+                else:
+                    new_account_id = account_id
+                
+            try:
+                user = self.bot.psnawp.user(account_id=new_account_id)
+            except PSNAWPNotFound as e:
+                new_account_id = account_id
+                if len(new_account_id) != 16:
+                    raise PSNAWPNotFound(f"Account ID {account_id} does not exist.")
+                try:
+                    new_account_id = str(int(new_account_id,16))
+                except ValueError:
+                    raise PSNAWPNotFound(f"Account ID {account_id} does not exist.")
+                try:
+                    user = self.bot.psnawp.user(account_id=new_account_id)
+                except PSNAWPNotFound:
+                    raise PSNAWPNotFound(f"Account ID {account_id} does not exist.")
+            
         user_profile = user.profile()
         user_friendship = user.friendship()
         user_language: list[str] = user_profile["languages"]
@@ -196,8 +220,8 @@ class PSNCog(commands.Cog):
             Field("PS+", f"{'`Active`' if user_profile['isPlus'] else '`Unactive`'}"),
             Field("Officially verified", f"{'`Yes`' if user_profile['isOfficiallyVerified'] else '`No`'}"),
             Field("Account ID", f"`{user.account_id}`"),
-            Field("HEX", f"`{(f'{int(user.account_id):016x}'.upper()).lstrip('0')}`"),
-            Field("Base64", f"`{base64.b64encode(int(user.account_id).to_bytes(8, 'little')).decode('ascii').upper()}`"),
+            Field("HEX", f"`{int(user.account_id):016x}`"),
+            Field("Base64", f"`{base64.b64encode(int(user.account_id).to_bytes(8, 'little')).decode('ascii')}`"),
             Field("Social", f"Friends: `{user_friendship['friendsCount'] if user_friendship['friendsCount'] >= 0 else '`Private`'}`", False)
         ]
 
