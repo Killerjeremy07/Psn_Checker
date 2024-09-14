@@ -5,8 +5,7 @@ import config
 from modules.custom_bot import Bot
 
 
-intents = discord.Intents.all()
-bot = Bot(psn_api_token=config.Secrets.PSN_API, intents=intents, command_prefix="/")
+bot = Bot(psn_api_token=config.Secrets.PSN_API,  command_prefix="/")
 
 @bot.event
 async def on_ready():
