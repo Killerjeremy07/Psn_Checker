@@ -8,7 +8,7 @@ import discord
 import pycountry
 from colorthief import ColorThief
 from discord.ext import commands
-from psnawp_api.core.psnawp_exceptions import PSNAWPForbidden
+import psnawp_api.core.psnawp_exceptions as psn_exceptions
 from psnawp_api.models.trophies.trophy_summary import TrophySummary
 
 import config
@@ -316,7 +316,7 @@ class PSNCog(commands.Cog):
             trophy_infos = user.trophy_summary()
             trophies = Trophy(trophy_infos, user_id, self.bot)
             fields.extend(trophies.trophy_fields)
-        except PSNAWPForbidden:
+        except Exception:
             fields.append(
                 Field(
                     self.bot.get_text(user_id, "trophies"),
@@ -340,7 +340,7 @@ class PSNCog(commands.Cog):
             self.process_presence_status(
                 author, user_presence, user_presence_info, current_game, fields
             )
-        except PSNAWPForbidden:
+        except Exception:
             fields.append(
                 Field(
                     self.bot.get_text(author.id, "user_presence"),
@@ -542,7 +542,7 @@ class PSNCog(commands.Cog):
             fields.append(
                 Field(self.bot.get_text(user_id, "total_games"), f"`{total_games}`")
             )
-        except PSNAWPForbidden:
+        except Exception:
             fields.append(
                 Field(
                     self.bot.get_text(user_id, "games"),
